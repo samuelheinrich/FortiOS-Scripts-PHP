@@ -1,0 +1,5 @@
+name,subnet,comment
+h-192.168.10.11,192.168.10.1/32,z-int vl10 Server 11
+n-192.168.10.0/24,192.168.10.0/24,z-int vl10 subnet
+hr-192.168.20.11,192.168.10.11/32,z-vpn branch Server
+nr-192.168.20.0/24,192.168.20.0/24,z-vpn branch subnet

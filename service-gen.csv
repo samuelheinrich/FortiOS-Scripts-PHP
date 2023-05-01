@@ -1,0 +1,7 @@
+Name,Tcp,Udp,Comment
+s-tcp/8443,8443,,TCP Objekt Port 8443
+s-tcp/1000-2000,1000-2000,,TCP Range Objekt Port 1000-2000
+s-udp/8443,8443,8443,UDP Objekt Port 8443
+s-udp/1000-2000,,1000-2000,UDP Range Objekt Port 1000-2000
+s-tcpudp/8443,8443,8443,TCP / UDP Objekt Port 8443
+s-tcpdup/1000-2000,1000-2000,1000-2000,TCP / UDP Range Objekt Port 1000-2000
