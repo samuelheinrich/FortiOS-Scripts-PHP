@@ -1,32 +1,47 @@
 # FortiOS-Scripts-PHP
 PHP Port of the fortiOS generator scripts
 
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/d88a1ab2-81b1-4ff0-bafb-ad6ec5ef7c97)
+
+
 
 VIP Generator
-![image](https://user-images.githubusercontent.com/16579232/235443665-035bc245-8681-48d7-be6a-2d2bdde7e2d9.png)
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/60ede79e-e441-43f9-ae31-e5a08d688f1f)
 
 
 ------
 
 Address Object Generator
-![image](https://user-images.githubusercontent.com/16579232/235443731-e15256a1-6e10-4853-b108-0185743b1f0d.png)
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/9728f19d-88d5-4b6b-b94f-7bb5ce2530c5)
 
 sample CSV input
-![image](https://user-images.githubusercontent.com/16579232/235443769-2b5c62b5-4a23-49c2-85a5-e42c96f945ba.png)
 
 ------
 
-Interface Generator
-![image](https://user-images.githubusercontent.com/16579232/235443791-c44c9116-39d9-4688-b650-93b8f9091d95.png)
+Address Generator
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/196b12bc-5e88-40a4-bd1d-b79451864262)
+
 
 Sample Input
-![image](https://user-images.githubusercontent.com/16579232/235443825-ab04c1d2-636f-4e52-85ad-fd6d981a9582.png)
 
 
 ------
 
 Service Object Generator
-![image](https://user-images.githubusercontent.com/16579232/235443912-0351e46f-8c24-4803-91b8-bf004eae8eb3.png)
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/b949df21-c9be-45f1-80fa-fe7d496a6bd3)
+
 
 sampel CSV Input
-![image](https://user-images.githubusercontent.com/16579232/235443954-c327df49-42cd-4d58-ac0c-f8c0e2fad361.png)
+
+
+------
+
+Static Route Generator
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/d0f85174-3a7e-4e40-8e75-b71b804558e5)
+
+
+------
+
+FQDN Object Generator
+
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/b04ec128-2791-4092-aedd-de1269e134c0)
