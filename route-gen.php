@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-<title>Service object Generator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Route Generator</title>
 <style>
     /* Style-Anweisungen für das Formular-Element */
 form {
@@ -99,11 +101,21 @@ input[type="text"], input[type="number"] {
     width: 100%;
     padding: 4px;
 }
-
-
-
-
 </style>
+<script>
+
+function validateForm() {
+    const subnetInput = document.getElementById('subnet');
+    const subnet = subnetInput.value;
+    const subnetRegex = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\/\d{1,2})|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/;
+
+    if (!subnetRegex.test(subnet)) {
+        alert('Bitte geben Sie ein gültiges Subnet ein.');
+        return false;
+    }
+
+    return true;
+}
 <script>
         function copyToClipboard() {
             const outputArea = document.getElementById('output');
@@ -113,89 +125,58 @@ input[type="text"], input[type="number"] {
         function clearTextarea() {
              document.getElementById("name_tcp_udp_comment").value = "";
         }
-    </script>
 
+</script>
 </head>
 <body>
-
 <div class="container">
-<h1>Service object Generator</h1>
+<h1>Route Generator</h1>
 <br>
-<a href="service-gen.csv" download>download sample CSV</a>
+<a href="route-gen.csv" download>download sample CSV</a>
+<br>
 
-<form action="service-gen.php" method="post" enctype="multipart/form-data"><br>
-    <label for="csv_file">upload CSV:</label>
-    <input type="file" name="csv_file" id="csv_file" accept=".csv" onchange="clearTextarea()">
-    <label for="name_tcp_udp_comment">oder Textfeld verwenden <span style="color:red;">(name,tcp,udp,comment):</span></label>
-    <textarea name="name_tcp_udp_comment" id="name_tcp_udp_comment" rows="6">s-tcp/8953,8953,,sample TCP Object
-s-udp/8953,,8953,sample UDP object
-s-udp/1000-2000,,1000-2000,sample UDP Object Range 1000-2000</textarea>
+
+<form action="route-gen.php" method="post"><br>
+    <label for="subnet_gateway_device_comment">Input: Subnet, Gateway, device, comment):</label>
+    <textarea name="subnet_gateway_device_comment" id="subnet_gateway_device_comment" rows="4" style="width: 100%;">10.10.10.0/24,1.1.1.1,vl0227,xxx vl10 route to xxxx
+10.10.20.0/24,1.1.1.1,vl0227,xxx vl20 route to xxxx</textarea><br>
     <input type="submit" value="generate">
-    <label for="group_name">Groupname: eg. "sg-(service group name)</label>
-    <input type="text" name="group_name" id="group_name" placeholder="sg-xxx">
-    <label for="group_description">Group Comment: </label>
-    <input type="text" name="group_description" id="group_description" placeholder="servicegroupe....">
-    <input type="submit" name="with_group" value="generate with group">
 </form>
 
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $input_lines = $_POST['name_tcp_udp_comment'];
-    if (empty($input_lines) && !empty($_FILES['csv_file']['tmp_name'])) {
-        $input_lines = file_get_contents($_FILES['csv_file']['tmp_name']);
-    }
-
-
+    $input_lines = $_POST['subnet_gateway_device_comment'];
     //$lines = explode("\n", $input_lines);
     $lines = array_filter(array_map('trim', explode("\n", $input_lines)));
     $output = '';
-    $names = [];
 
     foreach ($lines as $line) {
         $parts = explode(",", $line);
-        $name = trim($parts[0]);
-        $tcp = trim($parts[1]);
-        $udp = trim($parts[2]);
-        $comment = trim(implode(",", array_slice($parts, 3)));
-        $names[] = $name;
+        $subnet = trim($parts[0]);
+        $gateway = trim($parts[1]);
+        $device = trim($parts[2]);
+        $comment = trim($parts[3]);
 
-        $config_code = "config firewall service custom\n";
-        $config_code .= "    edit \"$name\"\n";
+        $config_code = "config router static\n";
+        $config_code .= "    edit 0\n";
+        $config_code .= "        set dst $subnet\n";
+        $config_code .= "        set gateway $gateway\n";
+        $config_code .= "        set device $device\n";
         $config_code .= "        set comment \"$comment\"\n";
-        if (!empty($tcp)) {
-            $config_code .= "        set tcp-portrange $tcp\n";
-        }
-        if (!empty($udp)) {
-            $config_code .= "        set udp-portrange $udp\n";
-        }
         $config_code .= "    next\n";
         $config_code .= "end\n\n";
+
         $output .= $config_code;
     }
-
-
-    if (isset($_POST['with_group'])) {
-        $group_name = $_POST['group_name'];
-        $group_description = $_POST['group_description'];
-        $member_list = implode('" "', $names);
-
-        $config_group = "config firewall service group\n";
-        $config_group .= "    edit \"$group_name\"\n";
-        $config_group .= "        set member \"$member_list\"\n";
-        $config_group .= "        set comment \"$group_description\"\n";
-        $config_group .= "    next\n";
-        $config_group .= "end\n\n";
-        $output .= $config_group;
-    }
-
 
     echo "<pre>" . htmlspecialchars($output) . "</pre>";
 }
 ?>
 
 
-<br><br><br><br>
+<br>
+<br>
         <a href="index.php">back to Index</a><br>
 
         </div>

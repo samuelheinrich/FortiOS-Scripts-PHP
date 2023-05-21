@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-<title>Address Objekt Generator</title>
-<style>
+    <meta charset="UTF-8">
+    <title>FQDN-Objekt-Generator</title>
+    <style>
     /* Style-Anweisungen für das Formular-Element */
 form {
     display: flex; /* Legt das Display-Modell auf Flexbox fest */
@@ -106,90 +107,64 @@ input[type="text"], input[type="number"] {
 </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Address Generator</h1>
-        <form action="addr-gen.php" method="post">
-            <label for="name_subnet_comment">use textfield <span class="red">(name,subnet,comment):</span></label>
-            <textarea name="name_subnet_comment" id="name_subnet_comment" rows="8">
-h-192.168.10.11,192.168.10.1/32,z-int vl10 Server 11
-n-192.168.10.0/24,192.168.10.0/24,z-int vl10 subnet
-hr-192.168.20.11,192.168.10.11/32,z-vpn branch Server
-nr-192.168.20.0/24,192.168.20.0/24,z-vpn branch subnet
-            </textarea>
-            <input type="submit" value="generate">
-            <label for="group_name">Groupname: zB. "hg- (HostGroup), ng- (NetworkGroup)</label>
-            <input type="text" name="group_name" id="group_name" placeholder="ng-xxx">
-            <label for="group_description">Group comment: (eg. zone, vlan, name)</label>
-            <input type="text" name="group_description" id="group_description" placeholder="z-int vl0012 host...">
-            <input type="submit" name="with_group" value="generate with group">
-        </form>
+<div class="container"> 
+    <h1>FQDN-Object-Generator</h1>
+    <form action="fqdn-gen.php" method="post">
+        <label for="fqdn_addresses">FQDN-Address (one url per line):</label>
+        <textarea name="fqdn_addresses" id="fqdn_addresses" rows="16" placeholder="example.com"><?php echo isset($_POST['fqdn_addresses']) ? htmlspecialchars($_POST['fqdn_addresses']) : ''; ?></textarea>
 
+        <input type="submit" value="generate">
+        <label for="group_name">Group name (optional):</label>
+        <input type="text" name="group_name" id="group_name" placeholder="z.B. fqdn-group" value="<?php echo isset($_POST['group_name']) ? htmlspecialchars($_POST['group_name']) : ''; ?>">
 
+        <input type="submit" name="with_group" value="generate with group"><br>
+    </form>
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $input_lines = $_POST['fqdn_addresses'];
+        $group_name = trim($_POST['group_name']);
+        $with_group = isset($_POST['with_group']);
 
+        $lines = array_filter(array_map('trim', explode("\n", $input_lines)));
+        $output = '';
+        $fqdn_names = [];
 
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $input_lines = $_POST['name_subnet_comment'];
+        foreach ($lines as $line) {
+            $fqdn_address = trim($line);
+            $fqdn_name = 'fqdn-' . preg_replace('/[^a-z0-9.]+/i', '-', $fqdn_address);
+            $fqdn_names[] = $fqdn_name;
 
-    if (empty($input_lines) && !empty($_FILES['csv_file']['tmp_name'])) {
-        $input_lines = file_get_contents($_FILES['csv_file']['tmp_name']);
+            $config_code = "config firewall address\n";
+            $config_code .= "    edit \"$fqdn_name\"\n";
+            $config_code .= "        set type fqdn\n";
+            $config_code .= "        set fqdn \"$fqdn_address\"\n";
+            $config_code .= "    next\n";
+            $config_code .= "end\n\n";
+
+            $output .= $config_code;
+        }
+
+        if ($with_group && !empty($group_name)) {
+            $group_config_code = "config firewall addrgrp\n";
+            $group_config_code .= "    edit \"$group_name\"\n";
+            // Schachteln Sie die Werte in Anführungszeichen ein
+            $group_config_code .= "        set member \"" . implode("\" \"", $fqdn_names) . "\"\n";
+            $group_config_code .= "    next\n";
+            $group_config_code .= "end\n\n";
+        
+            $output .= $group_config_code;
+        }
+        
+
+        echo "<pre>$output</pre>";
     }
-
-   // $lines = explode("\n", $input_lines);
-   $lines = array_filter(array_map('trim', explode("\n", $input_lines)));
-    $output = '';
-    $names = [];
-
-    foreach ($lines as $line) {
-        $parts = explode(",", $line);
-        $name = trim($parts[0]);
-        //$subnet = trim($parts[1]);
-        //$comment = trim($parts[2]);
-        $subnet = isset($parts[1]) && $parts[1] !== null ? trim($parts[1]) : '';
-        $comment = isset($parts[2]) && $parts[2] !== null ? trim($parts[2]) : '';
-
-        $names[] = $name;
-
-        $config_code = <<<EOT
-config firewall address
-    edit "$name"
-        set comment "$comment"
-        set subnet $subnet
-    next
-end
-EOT;
-
-        $output .= $config_code . "\n";
-    }
-
-    if (isset($_POST['with_group'])) {
-        $group_name = $_POST['group_name'];
-        $group_description = $_POST['group_description'];
-        $member_list = implode('" "', $names);
-
-        $config_group = <<<EOT
-config firewall addrgrp
-    edit "$group_name"
-        set member "$member_list"
-        set comment "$group_description"
-    next
-end
-EOT;
-
-        $output .= $config_group . "\n";
-    }
-
-//echo "<textarea id='output' rows='40' readonly>" . htmlspecialchars($output) . "</textarea>";
-echo "<pre>" . htmlspecialchars($output) . "</pre>";
-
-}
-?>
-
+    ?>
 
 <br><br><br>
-<br>
         <a href="index.php">back to Index</a><br>
 
         </div>
+
 </body>
+
 </html>
