@@ -1,7 +1,6 @@
 # FortiOS-Scripts-PHP
 PHP Port of the fortiOS generator scripts
 
-You can try a live version here: https://fortiscripts.selution.app/
 
 
 ![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/d88a1ab2-81b1-4ff0-bafb-ad6ec5ef7c97)
