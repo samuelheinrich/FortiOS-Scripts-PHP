@@ -2,8 +2,7 @@
 PHP Port of the fortiOS generator scripts
 
 
-
-![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/d88a1ab2-81b1-4ff0-bafb-ad6ec5ef7c97)
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/5bc32db2-a817-4a07-9d0e-55ef54ac3b23)
 
 
 
@@ -47,3 +46,9 @@ Static Route Generator
 FQDN Object Generator
 
 ![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/b04ec128-2791-4092-aedd-de1269e134c0)
+
+
+
+fwrule gen Generator
+
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/b92f5eaa-a075-49ed-a769-b6ec49c5f6a9)
