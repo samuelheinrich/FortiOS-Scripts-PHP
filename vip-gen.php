@@ -147,13 +147,25 @@ function copyToClipboard(text) {
     <input type="number" name="private_port" id="private_port" min="1" max="65535" placeholder="min=1 max=65535" value="<?php echo isset($_POST['private_port']) ? $_POST['private_port'] : ''; ?>">
   </div>
   <div class="full-width">
-    <label for="beschreibung">comment:</label>
+    <label for="beschreibung">Comment:</label>
     <input type="text" name="beschreibung" id="beschreibung" placeholder="xxx.domain.com / server XYZ" value="<?php echo isset($_POST['beschreibung']) ? $_POST['beschreibung'] : ''; ?>">
   </div>
   <div class="full-width">
-    <input type="submit" value="generate">
+    <label for="color">Object Color:</label>
+    <select name="color" id="color">
+      <option value="1">black</option>
+      <option value="2">blue</option>
+      <option value="3">green</option>
+      <option value="4">dark red</option>
+      <option value="5">pink</option>
+      <option value="6">red</option>
+    </select>
+  </div>
+  <div class="full-width">
+    <input type="submit" value="Generate">
   </div>
 </form>
+
 
 
 <?php
@@ -165,46 +177,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $private_port = $_POST['private_port'];
     $beschreibung = $_POST['beschreibung'];
     $destination_zone = $_POST['destination_zone'];
-    $config_code = <<<EOT
+    $color = $_POST['color'];
+
+    // Erzeugt den Anfang des Konfigurationscodes
+    $config_code = "
 config firewall service custom
-    edit "sg-vip-$public_ip:$public_port"
-        set comment "DNAT $public_ip:$public_port to $private_ip:$private_port $beschreibung"
+    edit \"sg-vip-$public_ip:$public_port\"
+        set comment \"DNAT $public_ip:$public_port to $private_ip:$private_port $beschreibung\"
         set tcp-portrange $public_port
     next
 end
 
 config firewall vip
-    edit "vip-$public_ip:$public_port"
-        set comment "DNAT $public_ip:$public_port to $private_ip:$private_port $beschreibung"
-        set service "sg-vip-$public_ip:$public_port"
-        set extip $public_ip
-        set mappedip "$private_ip"
-        set extintf "$wan_interface"
-        set color 6
+    edit \"vip-$public_ip:$public_port\"
+        set comment \"DNAT $public_ip:$public_port to $private_ip:$private_port $beschreibung\"
+        set service \"sg-vip-$public_ip:$public_port\"
+        set extip \"$public_ip\"
+        set mappedip \"$private_ip\"
+        set extintf \"$wan_interface\"
+        set color \"$color\"";
+
+    // Fügt Portforwarding hinzu, falls private_port und public_port nicht übereinstimmen
+    if ($private_port != $public_port) {
+        $config_code .= "
+        set portforward enable
+        set mappedport $private_port";
+    }
+
+    // Fügt den restlichen Teil des Konfigurationscodes hinzu
+    $config_code .= "
     next
 end
 
 config firewall policy
     edit 0
-        set name "vip-$public_ip:$public_port"
-        set srcintf "virtual-wan-link"
-        set dstintf "$destination_zone"
+        set name \"vip-$public_ip:$public_port\"
+        set srcintf \"virtual-wan-link\"
+        set dstintf \"$destination_zone\"
         set action accept
-        set srcaddr "INTERNET"
-        set dstaddr "vip-$public_ip:$public_port"
-        set schedule "always"
-        set service "sg-vip-$public_ip:$public_port"
+        set srcaddr \"INTERNET\"
+        set dstaddr \"vip-$public_ip:$public_port\"
+        set schedule \"always\"
+        set service \"sg-vip-$public_ip:$public_port\"
         set utm-status enable
         set logtraffic all
-        set comments "DNAT $public_ip:$public_port to $private_ip:$private_port $beschreibung"
+        set comments \"DNAT $public_ip:$public_port to $private_ip:$private_port $beschreibung\"
     next
-end
+end";
 
-EOT;
-
-    echo "<pre>" . htmlspecialchars($config_code) . "</pre>";
+    // Zeigt den generierten Konfigurationscode an (ohne htmlspecialchars)
+    echo "<pre id='configCode'>" . htmlspecialchars($config_code) . "</pre>";
 }
 ?>
+
+<br><br>
+
+<button onclick="copyToClipboard()">Copy to Clipboard</button>
+
+<script>
+function copyToClipboard() {
+  /* Get the text content from the configCode element */
+  const configCode = document.getElementById('configCode').textContent.trim();
+
+  /* Create a temporary textarea element to copy the text to the clipboard */
+  const tempTextarea = document.createElement('textarea');
+  tempTextarea.value = configCode;
+  document.body.appendChild(tempTextarea);
+
+  /* Select the text and copy it to the clipboard */
+  tempTextarea.select();
+  document.execCommand('copy');
+
+  /* Remove the temporary textarea */
+  document.body.removeChild(tempTextarea);
+
+  /* Provide visual feedback */
+  alert('Configuration code copied to clipboard!');
+}
+</script>
 
 
 

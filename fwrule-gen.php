@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>FQDN-Objekt-Generator</title>
-    <style>
+<title>Firewall Rule Generator</title>
+
+<style>
     /* Style-Anweisungen für das Formular-Element */
 form {
     display: flex; /* Legt das Display-Modell auf Flexbox fest */
@@ -101,101 +101,135 @@ input[type="text"], input[type="number"] {
     padding: 4px;
 }
 
-
-
+.red {
+    color: red;
+}
+.blue {
+    color: blue;
+}
+.black {
+    color: black;
+}
 
 </style>
 </head>
+
+
+
 <body>
-<div class="container"> 
-    <h1>FQDN-Object-Generator</h1>
-    <form action="fqdn-gen.php" method="post">
-        <label for="fqdn_addresses">FQDN-Address (one url per line):</label>
-        <textarea name="fqdn_addresses" id="fqdn_addresses" rows="16" placeholder="example.com"><?php echo isset($_POST['fqdn_addresses']) ? htmlspecialchars($_POST['fqdn_addresses'], ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
-        <input type="submit" value="generate">
-        <label for="group_name">Group name (optional):</label>
-        <input type="text" name="group_name" id="group_name" placeholder="z.B. fqdn-group" value="<?php echo isset($_POST['group_name']) ? htmlspecialchars($_POST['group_name'], ENT_QUOTES, 'UTF-8') : ''; ?>">
+    <div class="container">
+        <h1>Firewall Rule Generator</h1>
+        <br>
+<a href="service-gen.csv" download>download sample CSV</a>
+<br>
+
+        <form action="fwrule-gen.php" method="post">
+        <label for="rules">Enter the rules <span class="black">(status, name, srcintf, dstintf, action, <span class="blue">srcaddr</span>, <span class="red">dstaddr</span>, <span class="black">service</span>, nat, comments, label):</span></label>
+            <textarea name="rules" id="rules" rows="8">
+enable,ia-vl0040,z-int,virtual-wan-link,accept,n-172.0.40.0/24,INTERNET,sg-internet-basic,disable,Internet Access vl0040_vrf-TRUST,some_labelz-int/wan</textarea>
+            <input type="submit" value="generate">
+        </form>
 
 
-        <input type="submit" name="with_group" value="generate with group"><br>
-    </form>
-    <?php
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $input_lines = $_POST['fqdn_addresses'];
-        $group_name = trim($_POST['group_name']);
-        $with_group = isset($_POST['with_group']);
+        <?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['rules'])) {
+        $input_lines = htmlspecialchars($_POST['rules']);
+    } else {
+        $input_lines = '';
+    }
 
-        $lines = array_filter(array_map('trim', explode("\n", $input_lines)));
-        $output = '';
-        $fqdn_names = [];
+    $lines = array_filter(array_map('trim', explode("\n", $input_lines)));
+    $output = '';
+    $output_srcaddr = '';
+    $output_dstaddr = '';
 
-        foreach ($lines as $line) {
-            $fqdn_address = trim($line);
-            $fqdn_name = 'fqdn-' . preg_replace('/[^a-z0-9.]+/i', '-', $fqdn_address);
-            $fqdn_names[] = $fqdn_name;
+    foreach ($lines as $line) {
+        $parts = explode(",", $line);
+        $status = trim($parts[0]);
+        $name = trim($parts[1]);
+        $srcintf = trim($parts[2]);
+        $dstintf = trim($parts[3]);
+        $action = trim($parts[4]);
+        $srcaddr = trim($parts[5]);
+        $dstaddr = trim($parts[6]);
+        $service = trim($parts[7]);
+        $nat = trim($parts[8]);
+        $comments = trim($parts[9]);
+        $label = trim($parts[10]);
 
-            $config_code = "config firewall address\n";
-            $config_code .= "    edit \"$fqdn_name\"\n";
-            $config_code .= "        set type fqdn\n";
-            $config_code .= "        set fqdn \"$fqdn_address\"\n";
-            $config_code .= "    next\n";
-            $config_code .= "end\n\n";
+        $config_code = <<<EOT
+config firewall policy
+    edit 0
+        set status "$status"
+        set name "$name"
+        set srcintf "$srcintf"
+        set dstintf "$dstintf"
+        set action "$action"
+        set srcaddr "$srcaddr"
+        set dstaddr "$dstaddr"
+        set service "$service"
+        set nat "$nat"
+        set comments "$comments"
+        set label "$label"
+    next
+end
+EOT;
 
-            $output .= $config_code;
-        }
+        $config_srcaddr = <<<EOT
+config firewall address
+    edit "$srcaddr"
+        set comment "$srcintf $comments"
+        set subnet $srcaddr
+    next
+end
+EOT;
 
-        if ($with_group && !empty($group_name)) {
-            $group_config_code = "config firewall addrgrp\n";
-            $group_config_code .= "    edit \"$group_name\"\n";
-            // Schachteln Sie die Werte in Anführungszeichen ein
-            $group_config_code .= "        set member \"" . implode("\" \"", $fqdn_names) . "\"\n";
-            $group_config_code .= "    next\n";
-            $group_config_code .= "end\n\n";
-        
-            $output .= $group_config_code;
-        }
-        
+        $config_dstaddr = <<<EOT
+config firewall address
+    edit "$dstaddr"
+        set comment "$dstintf $comments"
+        set subnet $dstaddr
+    next
+end
+EOT;
 
-  //      echo "<pre>" . htmlspecialchars($output, ENT_QUOTES, 'UTF-8') . "</pre>";
+        $output .= $config_code . "\n";
+        $output_srcaddr .= $config_srcaddr . "\n";
+        $output_dstaddr .= $config_dstaddr . "\n";
+    }
 
-// Zeigt den generierten Konfigurationscode an (ohne htmlspecialchars)
     echo "<pre id='configCode'>" . htmlspecialchars($output) . "</pre>";
+    echo "<pre id='configSrcAddr' style='color:blue;'>" . htmlspecialchars($output_srcaddr) . "</pre>";
+    echo "<pre id='configDstAddr' style='color:red;'>" . htmlspecialchars($output_dstaddr) . "</pre>";
 }
 ?>
-
-<br><br>
+<br>Achtung: Firewall Address Objekte nur kopieren, wenn noch nicht vorhanden auf Forti!<br><br>
 
 <button onclick="copyToClipboard()">Copy to Clipboard</button>
 
 <script>
 function copyToClipboard() {
-  /* Get the text content from the configCode element */
   const configCode = document.getElementById('configCode').textContent.trim();
+  const configSrcAddr = document.getElementById('configSrcAddr').textContent.trim();
+  const configDstAddr = document.getElementById('configDstAddr').textContent.trim();
 
-  /* Create a temporary textarea element to copy the text to the clipboard */
   const tempTextarea = document.createElement('textarea');
-  tempTextarea.value = configCode;
+  tempTextarea.value = configCode + '\n' + configSrcAddr + '\n' + configDstAddr;
   document.body.appendChild(tempTextarea);
 
-  /* Select the text and copy it to the clipboard */
   tempTextarea.select();
   document.execCommand('copy');
 
-  /* Remove the temporary textarea */
   document.body.removeChild(tempTextarea);
 
-  /* Provide visual feedback */
   alert('Configuration code copied to clipboard!');
 }
 </script>
-
-
-
 <br><br><br>
+<br>
         <a href="index.php">back to Index</a><br>
 
-        </div>
-
+    </div>
 </body>
-
 </html>

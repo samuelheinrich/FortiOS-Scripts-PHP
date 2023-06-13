@@ -48,6 +48,19 @@
             position: relative;
         }
 
+        a.button2 {
+            display: inline-block;
+            text-align: center;
+            background-color: #fc03be;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            position: relative;
+        }
+
         a.button:hover {
             background-color: #0056b3;
         }
@@ -99,7 +112,8 @@ _/ ____\____________/  |_|__|
             <a href="service-gen.php" class="button" data-tooltip="This script generates Service objects for Fortigate devices.">Fortigate Service Objekt Generator</a>
             <a href="route-gen.php" class="button" data-tooltip="This script generates Static Route configurations for Fortigate devices.">Static Route Generator</a>
             <a href="fqdn-gen.php" class="button" data-tooltip="This script generates FQDN objects for Fortigate devices.">FQDN Generator</a>
-            <div class="category">Additional Tools</div>
+            <a href="fwrule-gen.php" class="button2" data-tooltip="This script generates firewall rules for Fortigate devices.">*NEW* fwrule Generator</a>
+            <div class="category">Additional Tools (experimental)</div>
             <a href="address-object-renamer.php" class="button" data-tooltip="This script renames Address objects for Fortigate devices.">Address Object Renamer</a>
             <a href="xml-converter.php" class="button" data-tooltip="This script converts Fortigate configurations to XML format.">XML Converter</a>
 </div>

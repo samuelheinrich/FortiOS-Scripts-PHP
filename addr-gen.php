@@ -128,11 +128,20 @@ nr-192.168.20.0/24,192.168.20.0/24,z-vpn branch subnet
 
 
 <?php
+/*
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input_lines = $_POST['name_subnet_comment'];
 
     if (empty($input_lines) && !empty($_FILES['csv_file']['tmp_name'])) {
         $input_lines = file_get_contents($_FILES['csv_file']['tmp_name']);
+    }
+*/
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $input_lines = htmlspecialchars($_POST['name_subnet_comment']);
+
+    if (empty($input_lines) && !empty($_FILES['csv_file']['tmp_name'])) {
+        $input_lines = htmlspecialchars(file_get_contents($_FILES['csv_file']['tmp_name']));
     }
 
    // $lines = explode("\n", $input_lines);
@@ -162,9 +171,14 @@ EOT;
         $output .= $config_code . "\n";
     }
 
+/*
     if (isset($_POST['with_group'])) {
         $group_name = $_POST['group_name'];
         $group_description = $_POST['group_description'];
+*/
+if (isset($_POST['with_group'])) {
+    $group_name = htmlspecialchars($_POST['group_name']);
+    $group_description = htmlspecialchars($_POST['group_description']);
         $member_list = implode('" "', $names);
 
         $config_group = <<<EOT
@@ -180,10 +194,40 @@ EOT;
     }
 
 //echo "<textarea id='output' rows='40' readonly>" . htmlspecialchars($output) . "</textarea>";
-echo "<pre>" . htmlspecialchars($output) . "</pre>";
+//echo "<pre>" . htmlspecialchars($output) . "</pre>";
+
+// Zeigt den generierten Konfigurationscode an (ohne htmlspecialchars)
+    echo "<pre id='configCode'>" . htmlspecialchars($output) . "</pre>";
 
 }
 ?>
+
+
+<br><br>
+
+<button onclick="copyToClipboard()">Copy to Clipboard</button>
+
+<script>
+function copyToClipboard() {
+  /* Get the text content from the configCode element */
+  const configCode = document.getElementById('configCode').textContent.trim();
+
+  /* Create a temporary textarea element to copy the text to the clipboard */
+  const tempTextarea = document.createElement('textarea');
+  tempTextarea.value = configCode;
+  document.body.appendChild(tempTextarea);
+
+  /* Select the text and copy it to the clipboard */
+  tempTextarea.select();
+  document.execCommand('copy');
+
+  /* Remove the temporary textarea */
+  document.body.removeChild(tempTextarea);
+
+  /* Provide visual feedback */
+  alert('Configuration code copied to clipboard!');
+}
+</script>
 
 
 <br><br><br>
