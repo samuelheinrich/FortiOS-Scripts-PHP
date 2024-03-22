@@ -117,6 +117,7 @@ _/ ____\____________/  |_|__|
             <div class="category">Additional Tools (experimental)</div>
             <a href="address-object-renamer.php" class="button" data-tooltip="This script renames Address objects for Fortigate devices.">Address Object Renamer</a>
             <a href="xml-converter.php" class="button" data-tooltip="This script converts Fortigate configurations to XML format.">XML Converter</a>
+            <a href="sslvpn-hardening.php" class="button" data-tooltip="Generates VIP Config to DNAT SSLVPN to Loopback.">SSLVPN on Loopback</a>
 </div>
 </div>
 </body>
