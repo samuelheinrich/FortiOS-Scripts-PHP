@@ -72,9 +72,11 @@
         $input1 = $_POST["input1"];
         $input2 = $_POST["input2"];
 
-        preg_match_all('/Remote LLDP nearest-bridge Agents on Local Port (\S+):[\s\S]+?System Name\s+=\s+(\S+),[\s\S]+?System Description\s+=\s+([\S\s]+?),\s*(?:Version|[\r\n])/', $input1, $matches1, PREG_SET_ORDER);
+        preg_match_all('/Remote LLDP nearest-bridge Agents on Local Port (\S+):[\s\S]+?System Name\s+=\s+([^\,]+),[\s\S]+?System Description\s+=\s+([\S\s]+?),\s*(?:Version|[\r\n])/', $input1, $matches1, PREG_SET_ORDER);
+
 
         preg_match_all('/(\d+\/\d+\/\d+)\s+Dynamic\s+\d+\s+ATTACHED\s+\d+\s+UP\s+UP/', $input2, $matches2, PREG_SET_ORDER);
+        
         $aggInfo = [];
         foreach ($matches2 as $match) {
             $aggInfo[$match[1]] = "agg";
