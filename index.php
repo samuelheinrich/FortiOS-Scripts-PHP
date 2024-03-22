@@ -118,6 +118,7 @@ _/ ____\____________/  |_|__|
             <a href="address-object-renamer.php" class="button" data-tooltip="This script renames Address objects for Fortigate devices.">Address Object Renamer</a>
             <a href="xml-converter.php" class="button" data-tooltip="This script converts Fortigate configurations to XML format.">XML Converter</a>
             <a href="sslvpn-hardening.php" class="button" data-tooltip="Generates VIP Config to DNAT SSLVPN to Loopback.">SSLVPN on Loopback</a>
+            <a href="alcatel-description-maker.php" class="button" data-tooltip="Generates Alcatel Description with lldp input">Alcatel LLDP description maker</a>
 </div>
 </div>
 </body>
