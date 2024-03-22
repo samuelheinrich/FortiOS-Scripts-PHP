@@ -3,8 +3,7 @@ PHP Port of the fortiOS generator scripts
 
 live Version online here: https://fortiscripts.selution.app
 
-![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/b7cc794b-42a3-4491-b05c-80ffbe15c702)
-
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/da0ddde7-ee97-4ea5-88f9-d14fde426898)
 
 
 VIP Generator
