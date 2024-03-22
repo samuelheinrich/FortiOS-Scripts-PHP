@@ -3,7 +3,8 @@ PHP Port of the fortiOS generator scripts
 
 live Version online here: https://fortiscripts.selution.app
 
-![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/306f27f8-d1c9-4596-aca6-5b8f16e290ec)
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/b7cc794b-42a3-4491-b05c-80ffbe15c702)
+
 
 
 VIP Generator
@@ -57,4 +58,8 @@ fwrule gen Generator
 ipsec s2s generator
 
 ![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/2146b466-b6d2-48fa-a89d-1157682b7904)
+
+SSLVPN Hardening
+
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/8b4087a4-1292-4356-8f85-5988d7d1892d)
 
