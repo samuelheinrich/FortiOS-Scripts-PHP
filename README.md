@@ -3,7 +3,7 @@ PHP Port of the fortiOS generator scripts
 
 live Version online here: https://fortiscripts.selution.app
 
-![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/da0ddde7-ee97-4ea5-88f9-d14fde426898)
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/f526831f-48b1-42cf-85c4-1d167ac47b33)
 
 
 VIP Generator
@@ -46,6 +46,11 @@ Static Route Generator
 FQDN Object Generator
 
 ![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/b04ec128-2791-4092-aedd-de1269e134c0)
+
+
+Debug Flow Trace Generator
+
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/d681f204-172c-4b63-8dd6-02c4fabaf7c7)
 
 
 
