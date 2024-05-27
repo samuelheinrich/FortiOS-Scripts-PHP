@@ -112,9 +112,10 @@ _/ ____\____________/  |_|__|
             <a href="service-gen.php" class="button" data-tooltip="This script generates Service objects for Fortigate devices.">Fortigate Service Objekt Generator</a>
             <a href="route-gen.php" class="button" data-tooltip="This script generates Static Route configurations for Fortigate devices.">Static Route Generator</a>
             <a href="fqdn-gen.php" class="button" data-tooltip="This script generates FQDN objects for Fortigate devices.">FQDN Generator</a>
+            <a href="flow-trace-gen.php" class="button" data-tooltip="This script generates debug flow trace output.">flow trace Generator</a>
+            <div class="category">Additional Tools (experimental)</div>            
             <a href="fwrule-gen.php" class="button2" data-tooltip="This script generates firewall rules for Fortigate devices.">*NEW* fwrule Generator</a>
             <a href="ipsec-s2s-gen.php" class="button2" data-tooltip="This script generates ipsec p1/p2 code Fortigate devices.">*NEW* ipsec s2s Generator</a>
-            <div class="category">Additional Tools (experimental)</div>
             <a href="address-object-renamer.php" class="button" data-tooltip="This script renames Address objects for Fortigate devices.">Address Object Renamer</a>
             <a href="xml-converter.php" class="button" data-tooltip="This script converts Fortigate configurations to XML format.">XML Converter</a>
             <a href="sslvpn-hardening.php" class="button" data-tooltip="Generates VIP Config to DNAT SSLVPN to Loopback.">SSLVPN on Loopback</a>
