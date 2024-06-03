@@ -3,7 +3,7 @@ PHP Port of the fortiOS generator scripts
 
 live Version online here: https://fortiscripts.selution.app
 
-![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/f526831f-48b1-42cf-85c4-1d167ac47b33)
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/67a3a7bb-6408-4f02-b875-b21a66ee8a8b)
 
 
 VIP Generator
@@ -52,6 +52,9 @@ Debug Flow Trace Generator
 
 ![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/d681f204-172c-4b63-8dd6-02c4fabaf7c7)
 
+diag system session Generator
+
+![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/1f8ef633-99f8-4d22-a4d3-7cae134b4f0d)
 
 
 fwrule gen Generator
