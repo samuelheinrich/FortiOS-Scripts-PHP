@@ -144,7 +144,7 @@
                 if ($clear) {
                     $output .= "diagnose sys session filter clear\n";
                 } elseif ($list) {
-                    $output .= "diagnose sys session filter list\n";
+                    $output .= "diagnose sys session list\n";
                 }
 
                 echo "<div id='output'><pre>$output</pre></div>";
