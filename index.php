@@ -126,13 +126,16 @@ _/ ____\____________/  |_|__|
             <a href="fqdn-gen.php" class="button" data-tooltip="This script generates FQDN objects for Fortigate devices.">FQDN Generator</a>
             <a href="flow-trace-gen.php" class="button" data-tooltip="This script generates debug flow trace output.">flow trace Generator</a>
             <a href="diag-session-gen.php" class="button3" data-tooltip="This script generates diag system session output.">diag sys session Generator</a>
-            <div class="category">Additional Tools (experimental)</div>            
-            <a href="fwrule-gen.php" class="button2" data-tooltip="This script generates firewall rules for Fortigate devices.">*NEW* fwrule Generator</a>
-            <a href="ipsec-s2s-gen.php" class="button2" data-tooltip="This script generates ipsec p1/p2 code Fortigate devices.">*NEW* ipsec s2s Generator</a>
-            <a href="address-object-renamer.php" class="button" data-tooltip="This script renames Address objects for Fortigate devices.">Address Object Renamer</a>
-            <a href="xml-converter.php" class="button" data-tooltip="This script converts Fortigate configurations to XML format.">XML Converter</a>
             <a href="sslvpn-hardening.php" class="button" data-tooltip="Generates VIP Config to DNAT SSLVPN to Loopback.">SSLVPN on Loopback</a>
+            <a href="log-to-fwrule-gen.php" class="button2" data-tooltip="Generates VIP Config to DNAT SSLVPN to Loopback.">*NEW* Log to FW Rule generator</a>
+            <div class="category">Additional Tools (experimental)</div>            
+            <a href="fwrule-gen.php" class="button" data-tooltip="This script generates firewall rules for Fortigate devices.">legacy fwrule Generator</a>
+            <a href="ipsec-s2s-gen.php" class="button" data-tooltip="This script generates ipsec p1/p2 code Fortigate devices.">legacy ipsec s2s Generator</a>
+            <a href="address-object-renamer.php" class="button" data-tooltip="This script renames Address objects for Fortigate devices.">legacy Address Object Renamer</a>
+            <div class="category">3rd party tools</div>    
+            <a href="xml-converter.php" class="button" data-tooltip="This script converts Fortigate configurations to XML format.">Sophos XML to CSV Converter</a>
             <a href="alcatel-description-maker.php" class="button" data-tooltip="Generates Alcatel Description with lldp input">Alcatel LLDP description maker</a>
+            <a href="cui-checker.php" class="button" data-tooltip="Cisco Unsed inteface checker">Cisco Unsed inteface checker</a>
 </div>
 </div>
 </body>
