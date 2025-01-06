@@ -3,7 +3,8 @@ PHP Port of the fortiOS generator scripts
 
 live Version online here: https://fortiscripts.selution.app
 
-![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/67a3a7bb-6408-4f02-b875-b21a66ee8a8b)
+![image](https://github.com/user-attachments/assets/2abb9b1c-0884-4fe7-a96f-65fa00af152d)
+
 
 
 VIP Generator
@@ -57,9 +58,10 @@ diag system session Generator
 ![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/1f8ef633-99f8-4d22-a4d3-7cae134b4f0d)
 
 
-fwrule gen Generator
+Log to FW Rule generator
 
-![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/b92f5eaa-a075-49ed-a769-b6ec49c5f6a9)
+![image](https://github.com/user-attachments/assets/bf545e20-69c6-4305-9934-f9951139d601)
+
 
 
 ipsec s2s generator
