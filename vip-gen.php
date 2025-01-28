@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-    /* Style-Anweisungen für das Formular-Element */
+    <style>
+            /* Style-Anweisungen für das Formular-Element */
 form {
     display: flex; /* Legt das Display-Modell auf Flexbox fest */
     flex-direction: column; /* Stellt die Flex-Elemente in einer Spalte an */
@@ -99,168 +99,187 @@ input[type="text"], input[type="number"] {
     padding: 4px;
 }
 
+        /* Styling bleibt gleich, mit einer Ergänzung für das deaktivierte Eingabefeld */
+        input[disabled] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+    </style>
+    <script>
+        function togglePublicPortInput(checkbox) {
+            const publicPortInput = document.getElementById('public_port');
+            const privatePortInput = document.getElementById('private_port');
 
+            if (checkbox.checked) {
+                // "ALL" aktiviert: Beide Felder deaktivieren
+                publicPortInput.disabled = true;
+                privatePortInput.disabled = true;
+                publicPortInput.value = "1-65535";
+                privatePortInput.value = "1-65535";
+            } else {
+                publicPortInput.disabled = false;
+                privatePortInput.disabled = false;
+                publicPortInput.value = "";
+                privatePortInput.value = "";
+            }
+        }
 
+        function checkPublicPorts() {
+            const publicPortInput = document.getElementById('public_port');
+            const privatePortInput = document.getElementById('private_port');
+            const publicPortValue = publicPortInput.value;
 
-</style>
-<script>
-function copyToClipboard(text) {
-  var temp = document.createElement("textarea");
-  temp.value = text;
-  document.body.appendChild(temp);
-  temp.select();
-  document.execCommand("copy");
-  document.body.removeChild(temp);
-  alert("Copied to clipboard");
-}
-</script>
-
-<div class="container">
-    <h1>VIP object Generator</h1>
-
+            if (publicPortValue.includes(",") || publicPortValue.includes("-")) {
+                // Mehrere Ports erkannt: Private Port deaktivieren und synchronisieren
+                privatePortInput.disabled = true;
+                privatePortInput.value = publicPortValue;
+            } else {
+                // Einzelner Port: Private Port aktivieren
+                privatePortInput.disabled = false;
+            }
+        }
+    </script>
 </head>
 <body>
+    <div class="container">
+        <h1>VIP Object Generator</h1>
+        <form action="" method="post" class="form-container">
+            <div>
+                <label for="wan_interface">WAN Interface:</label>
+                <input type="text" name="wan_interface" id="wan_interface" placeholder="vlxxxx" value="<?php echo htmlspecialchars($_POST['wan_interface'] ?? ''); ?>" required>
+            </div>
+            <div>
+                <label for="destination_zone">Destination Zone:</label>
+                <input type="text" name="destination_zone" id="destination_zone" placeholder="dmz" value="<?php echo htmlspecialchars($_POST['destination_zone'] ?? ''); ?>" required>
+            </div>
+            <div>
+                <label for="public_ip">Public IP:</label>
+                <input type="text" name="public_ip" id="public_ip" placeholder="1.1.1.1" pattern="\d{1,3}(\.\d{1,3}){3}" value="<?php echo htmlspecialchars($_POST['public_ip'] ?? ''); ?>" required>
+            </div>
+            <div>
+                <label for="public_port">Public Port(s):</label>
+                <input type="text" name="public_port" id="public_port" placeholder="443,500,344-388" pattern="(\d+(-\d+)?)(,(\d+(-\d+)?))*" value="<?php echo htmlspecialchars($_POST['public_port'] ?? ''); ?>" oninput="checkPublicPorts()">
+                <label>
+                    <input type="checkbox" id="all_ports" name="all_ports" <?php echo isset($_POST['all_ports']) ? 'checked' : ''; ?> onclick="togglePublicPortInput(this)"> All Ports
+                </label>
+            </div>
+            <div>
+                <label for="private_ip">Private IP:</label>
+                <input type="text" name="private_ip" id="private_ip" placeholder="2.2.2.2" pattern="\d{1,3}(\.\d{1,3}){3}" value="<?php echo htmlspecialchars($_POST['private_ip'] ?? ''); ?>" required>
+            </div>
+            <div>
+                <label for="private_port">Private Port:</label>
+                <input type="text" name="private_port" id="private_port" placeholder="443" value="<?php echo htmlspecialchars($_POST['private_port'] ?? ''); ?>" required>
+            </div>
+            <div class="full-width">
+                <label for="beschreibung">Comment:</label>
+                <input type="text" name="beschreibung" id="beschreibung" placeholder="this is a comment" value="<?php echo htmlspecialchars($_POST['beschreibung'] ?? ''); ?>">
+            </div>
+            <div class="full-width">
+                <label for="color">Object Color:</label>
+                <select name="color" id="color" required>
+                    <option value="1" <?php echo (isset($_POST['color']) && $_POST['color'] == '1') ? 'selected' : ''; ?>>black</option>
+                    <option value="2" <?php echo (isset($_POST['color']) && $_POST['color'] == '2') ? 'selected' : ''; ?>>blue</option>
+                    <option value="3" <?php echo (isset($_POST['color']) && $_POST['color'] == '3') ? 'selected' : ''; ?>>green</option>
+                    <option value="4" <?php echo (isset($_POST['color']) && $_POST['color'] == '4') ? 'selected' : ''; ?>>dark red</option>
+                    <option value="5" <?php echo (isset($_POST['color']) && $_POST['color'] == '5') ? 'selected' : ''; ?>>pink</option>
+                    <option value="6" <?php echo (isset($_POST['color']) && $_POST['color'] == '6') ? 'selected' : ''; ?>>red</option>
+                </select>
+            </div>
+            <div class="full-width">
+                <input type="submit" value="Generate">
+            </div>
+        </form>
 
-<form action="vip-gen.php" method="post" class="form-container">
-  <div>
-    <label for="wan_interface">WAN Interface:</label>
-    <input type="text" name="wan_interface" id="wan_interface" placeholder="vlxxxx" value="<?php echo isset($_POST['wan_interface']) ? $_POST['wan_interface'] : ''; ?>">
-  </div>
-  <div>
-    <label for="destination_zone">Destination Zone:</label>
-    <input type="text" name="destination_zone" id="destination_zone" placeholder="z-xxx" value="<?php echo isset($_POST['destination_zone']) ? $_POST['destination_zone'] : ''; ?>">
-  </div>
-  <div>
-    <label for="public_ip">Public IP:</label>
-    <input type="text" name="public_ip" id="public_ip" placeholder="x.x.x.x" value="<?php echo isset($_POST['public_ip']) ? $_POST['public_ip'] : ''; ?>">
-  </div>
-  <div>
-    <label for="public_port">Public Port:</label>
-    <input type="number" name="public_port" id="public_port" min="1" max="65535" placeholder="min=1 max=65535" value="<?php echo isset($_POST['public_port']) ? $_POST['public_port'] : ''; ?>">
-  </div>
-  <div>
-    <label for="private_ip">Private IP:</label>
-    <input type="text" name="private_ip" id="private_ip"  placeholder="y.y.y.y" value="<?php echo isset($_POST['private_ip']) ? $_POST['private_ip'] : ''; ?>">
-  </div>
-  <div>
-    <label for="private_port">Private Port:</label>
-    <input type="number" name="private_port" id="private_port" min="1" max="65535" placeholder="min=1 max=65535" value="<?php echo isset($_POST['private_port']) ? $_POST['private_port'] : ''; ?>">
-  </div>
-  <div class="full-width">
-    <label for="beschreibung">Comment:</label>
-    <input type="text" name="beschreibung" id="beschreibung" placeholder="xxx.domain.com / server XYZ" value="<?php echo isset($_POST['beschreibung']) ? $_POST['beschreibung'] : ''; ?>">
-  </div>
-  <div class="full-width">
-    <label for="color">Object Color:</label>
-    <select name="color" id="color">
-      <option value="1">black</option>
-      <option value="2">blue</option>
-      <option value="3">green</option>
-      <option value="4">dark red</option>
-      <option value="5">pink</option>
-      <option value="6">red</option>
-    </select>
-  </div>
-  <div class="full-width">
-    <input type="submit" value="Generate">
-  </div>
-</form>
-
-
-
-<?php
+        <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $wan_interface = $_POST['wan_interface'];
-    $public_ip = $_POST['public_ip'];
-    $public_port = $_POST['public_port'];
-    $private_ip = $_POST['private_ip'];
-    $private_port = $_POST['private_port'];
-    $beschreibung = $_POST['beschreibung'];
-    $destination_zone = $_POST['destination_zone'];
-    $color = $_POST['color'];
+    $wan_interface = htmlspecialchars($_POST['wan_interface'] ?? '');
+    $public_ip = htmlspecialchars($_POST['public_ip'] ?? '');
+    $public_port = htmlspecialchars($_POST['public_port'] ?? '');
+    $private_ip = htmlspecialchars($_POST['private_ip'] ?? '');
+    $private_port = htmlspecialchars($_POST['private_port'] ?? '');
+    $beschreibung = htmlspecialchars($_POST['beschreibung'] ?? 'No Description');
+    $destination_zone = htmlspecialchars($_POST['destination_zone'] ?? '');
+    $color = htmlspecialchars($_POST['color'] ?? '');
+    $all_ports = isset($_POST['all_ports']) ? true : false;
 
-    // Erzeugt den Anfang des Konfigurationscodes
-    $config_code = "
+    if ($all_ports) {
+        $tcp_portrange = "1-65535";
+        $port_label = "ALL";
+    } else {
+        // Ersetzen von Kommas durch Leerzeichen
+        $tcp_portrange = str_replace(',', ' ', $public_port);
+
+        // Prüfen, ob mehrere Ports vorliegen
+        if (strpos($public_port, ',') !== false || strpos($public_port, '-') !== false) {
+            $port_label = "many"; // Name des Serviceobjekts endet mit "many"
+        } else {
+            $port_label = $public_port; // Einzelner Port wird verwendet
+        }
+    }
+
+    $service_config = "
 config firewall service custom
-    edit \"sg-vip-$public_ip:$public_port\"
+    edit \"sg-vip-$public_ip:$port_label\"
         set comment \"DNAT $public_ip:$public_port to $private_ip:$private_port $beschreibung\"
-        set tcp-portrange $public_port
+        set tcp-portrange $tcp_portrange
     next
-end
+end";
 
+    $vip_config = "
 config firewall vip
-    edit \"vip-$public_ip:$public_port\"
+    edit \"vip-$public_ip:$port_label\"
         set comment \"DNAT $public_ip:$public_port to $private_ip:$private_port $beschreibung\"
-        set service \"sg-vip-$public_ip:$public_port\"
+        set service \"sg-vip-$public_ip:$port_label\"
         set extip \"$public_ip\"
         set mappedip \"$private_ip\"
         set extintf \"$wan_interface\"
-        set color \"$color\"";
-
-    // Fügt Portforwarding hinzu, falls private_port und public_port nicht übereinstimmen
-    if ($private_port != $public_port) {
-        $config_code .= "
-        set portforward enable
-        set mappedport $private_port";
-    }
-
-    // Fügt den restlichen Teil des Konfigurationscodes hinzu
-    $config_code .= "
+        set color \"$color\"
     next
-end
+end";
 
+    $policy_config = "
 config firewall policy
     edit 0
-        set name \"vip-$public_ip:$public_port\"
+        set name \"vip-$public_ip:$port_label\"
         set srcintf \"virtual-wan-link\"
         set dstintf \"$destination_zone\"
         set action accept
-        set srcaddr \"INTERNET\"
-        set dstaddr \"vip-$public_ip:$public_port\"
+        set srcaddr \"ALL\"
+        set dstaddr \"vip-$public_ip:$port_label\"
         set schedule \"always\"
-        set service \"sg-vip-$public_ip:$public_port\"
+        set service \"sg-vip-$public_ip:$port_label\"
         set utm-status enable
         set logtraffic all
         set comments \"DNAT $public_ip:$public_port to $private_ip:$private_port $beschreibung\"
     next
 end";
 
-    // Zeigt den generierten Konfigurationscode an (ohne htmlspecialchars)
-    echo "<pre id='configCode'>" . htmlspecialchars($config_code) . "</pre>";
+    echo "<pre id='configCode'>" . htmlspecialchars($service_config . $vip_config . $policy_config) . "</pre>";
+    echo "<button onclick='copyToClipboard()'>Copy to Clipboard</button>";
 }
 ?>
 
-<br><br>
+        <br><br>
+        <a href="index.php">Back to Index</a>
+    </div>
+    <script>
+        function copyToClipboard() {
+            const configCode = document.getElementById('configCode')?.textContent.trim();
+            if (!configCode) {
+                alert('No configuration code to copy!');
+                return;
+            }
 
-<button onclick="copyToClipboard()">Copy to Clipboard</button>
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = configCode;
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextarea);
 
-<script>
-function copyToClipboard() {
-  /* Get the text content from the configCode element */
-  const configCode = document.getElementById('configCode').textContent.trim();
-
-  /* Create a temporary textarea element to copy the text to the clipboard */
-  const tempTextarea = document.createElement('textarea');
-  tempTextarea.value = configCode;
-  document.body.appendChild(tempTextarea);
-
-  /* Select the text and copy it to the clipboard */
-  tempTextarea.select();
-  document.execCommand('copy');
-
-  /* Remove the temporary textarea */
-  document.body.removeChild(tempTextarea);
-
-  /* Provide visual feedback */
-  alert('Configuration code copied to clipboard!');
-}
-</script>
-
-
-
-
-<br><br><br> <br>
-    <a href="index.php">back to index</a>
-</div>
+            alert('Configuration code copied to clipboard!');
+        }
+    </script>
 </body>
 </html>
