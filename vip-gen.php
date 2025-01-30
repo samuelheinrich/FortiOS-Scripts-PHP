@@ -245,7 +245,7 @@ config firewall policy
         set srcintf \"virtual-wan-link\"
         set dstintf \"$destination_zone\"
         set action accept
-        set srcaddr \"ALL\"
+        set srcaddr \"all\"
         set dstaddr \"vip-$public_ip:$port_label\"
         set schedule \"always\"
         set service \"sg-vip-$public_ip:$port_label\"
