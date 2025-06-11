@@ -119,7 +119,7 @@ _/ ____\____________/  |_|__|
         <div class="links">
             <div class="category">FSOS CLI syntax generators</div>
             <a href="vip-gen.php" class="button" data-tooltip="This script generates VIP objects for Fortigate devices.">Fortigate VIP Objekt Generator</a>
-            <a href="addr-gen.php" class="button" data-tooltip="This script generates Address objects for Fortigate devices.">Fortigate Address Objekt Generator</a>
+            <a href="addr-gen2.php" class="button" data-tooltip="This script generates Address objects for Fortigate devices.">Fortigate Address Objekt Generator</a>
             <a href="interface-gen.php" class="button" data-tooltip="This script generates Interface objects for Fortigate devices.">Fortigate Interface Objekt Generator</a>
             <a href="service-gen.php" class="button" data-tooltip="This script generates Service objects for Fortigate devices.">Fortigate Service Objekt Generator</a>
             <a href="route-gen.php" class="button" data-tooltip="This script generates Static Route configurations for Fortigate devices.">Static Route Generator</a>
