@@ -136,6 +136,8 @@ _/ ____\____________/  |_|__|
             <a href="xml-converter.php" class="button" data-tooltip="This script converts Fortigate configurations to XML format.">Sophos XML to CSV Converter</a>
             <a href="alcatel-description-maker.php" class="button" data-tooltip="Generates Alcatel Description with lldp input">Alcatel LLDP description maker</a>
             <a href="cui-checker.php" class="button" data-tooltip="Cisco Unsed inteface checker">Cisco Unsed inteface checker</a>
+            <a href="CVE-2025-20352.php" class="button" data-tooltip="SNMP Workaround Generator (CVE-2025-20352)">CVE-2025-20352</a>
+         
 </div>
 </div>
 </body>
