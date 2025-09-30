@@ -72,3 +72,8 @@ SSLVPN Hardening
 
 ![image](https://github.com/samuelheinrich/FortiOS-Scripts-PHP/assets/16579232/8b4087a4-1292-4356-8f85-5988d7d1892d)
 
+
+SNMP Workaround Generator (CVE-2025-20352 / CSCwq31287)
+
+<img width="1748" height="1044" alt="image" src="https://github.com/user-attachments/assets/4bea328b-8e08-473d-b93b-f121d86d43c1" />
+
